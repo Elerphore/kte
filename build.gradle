@@ -18,6 +18,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.apache.cxf:cxf:3.5.5'
+	implementation 'org.apache.cxf:cxf-spring-boot-starter-jaxws:3.5.5'
 }
 
 tasks.named('test') {
