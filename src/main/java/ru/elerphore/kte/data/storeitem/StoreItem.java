@@ -11,7 +11,7 @@ public class StoreItem {
     public String description;
 
     public Double averageRating;
-    public Double customerRating;
+    public Integer customerRating;
     public Map<String, Integer> ratingDistribution;
 
     public StoreItem(Integer id, String name, BigDecimal price) {
@@ -26,7 +26,7 @@ public class StoreItem {
             BigDecimal price,
             String description,
             Double averageRating,
-            Double customerRating,
+            Integer customerRating,
             Map<String, Integer> ratingDistribution) {
 
         this.id = id;

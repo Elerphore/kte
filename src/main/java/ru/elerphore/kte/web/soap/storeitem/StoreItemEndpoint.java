@@ -2,7 +2,6 @@ package ru.elerphore.kte.web.soap.storeitem;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
 import ru.elerphore.kte.data.storeitem.StoreItem;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
@@ -13,7 +12,6 @@ import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingRepo
 
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -97,5 +95,19 @@ public class StoreItemEndpoint implements StoreItemEndpointInterface {
         storeItemResponse.setItems(Arrays.asList(storeItem));
 
         return storeItemResponse;
+    }
+
+    @Override
+    public void setCustomerStoreItemRating(Integer customerId, Integer storeItemId, Integer rating) {
+
+        StoreItemCustomerRatingEntity storeItemCustomerRatingEntity = storeItemCustomerRatingRepository.findAllByCustomerIdAndStoreItemId(customerId, storeItemId);
+
+        if(storeItemCustomerRatingEntity != null) {
+            storeItemCustomerRatingEntity.setRating(rating);
+        } else {
+            storeItemCustomerRatingEntity = new StoreItemCustomerRatingEntity(customerId, storeItemId, rating);
+        }
+
+        storeItemCustomerRatingRepository.save(storeItemCustomerRatingEntity);
     }
 }

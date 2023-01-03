@@ -19,24 +19,30 @@ public class StoreItemCustomerRatingEntity {
     private Integer storeitemId;
 
     @Column
-    private Double rating;
+    private Integer rating;
 
     public StoreItemCustomerRatingEntity() {
 
     }
 
-    public StoreItemCustomerRatingEntity(Integer id, Integer customerId, Integer storeItemId, Double rating) {
+    public StoreItemCustomerRatingEntity(Integer customerId, Integer storeItemId, Integer rating) {
+        this.customerId = customerId;
+        this.storeitemId = storeItemId;
+        this.rating = rating;
+    }
+
+    public StoreItemCustomerRatingEntity(Integer id, Integer customerId, Integer storeItemId, Integer rating) {
         this.id = id;
         this.customerId = customerId;
         this.storeitemId = storeItemId;
         this.rating = rating;
     }
 
-    public Double getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 

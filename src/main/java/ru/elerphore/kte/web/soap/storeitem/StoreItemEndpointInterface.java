@@ -22,4 +22,13 @@ public interface StoreItemEndpointInterface {
             @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
             @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId
     );
+
+    @WebResult(name = "response", targetNamespace = "")
+    @RequestWrapper(localName = "CustomerStoreItemRatingRequest")
+    @ResponseWrapper(className = "StoreItemResponse")
+    void setCustomerStoreItemRating(
+            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
+            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId,
+            @WebParam(name = "rating", targetNamespace = "http://kte.assigment.application") Integer rating
+    );
 }
