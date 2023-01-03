@@ -6,7 +6,7 @@ import java.util.List;
 
 @XmlType(name = "CustomerResponse", namespace = "http://kte.assigment.application")
 public class CustomerResponse {
-    protected List<CustomerEntity> items;
+    private List<CustomerEntity> items;
 
     @XmlElement(required = true, name="items")
     public List<CustomerEntity> getItems() {

@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "CustomerEntity")
 public class CustomerEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
