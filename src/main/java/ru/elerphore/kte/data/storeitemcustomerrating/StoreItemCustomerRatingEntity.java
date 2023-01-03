@@ -1,41 +1,35 @@
 package ru.elerphore.kte.data.storeitemcustomerrating;
 
-import ru.elerphore.kte.data.customer.CustomerEntity;
-import ru.elerphore.kte.data.storeitem.StoreItemEntity;
-
 import javax.persistence.*;
 
 @Entity(name = "store_item_customer_rating")
 public class StoreItemCustomerRatingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private CustomerEntity customerEntity;
+//    @OneToOne
+//    @JoinColumn(name = "customer_id")
+    @Column
+    private Integer customerId;
 
-    @OneToOne
-    @JoinColumn(name = "storeitem_id")
-    private StoreItemEntity storeItemEntity;
+//    @OneToOne
+//    @JoinColumn(name = "storeitem_id")
+    @Column
+    private Integer storeitemId;
 
-    @Column(name = "rating")
+    @Column
     private Double rating;
 
-    public CustomerEntity getCustomerEntity() {
-        return customerEntity;
+    public StoreItemCustomerRatingEntity() {
+
     }
 
-    public void setCustomerEntity(CustomerEntity customerEntity) {
-        this.customerEntity = customerEntity;
-    }
-
-    public StoreItemEntity getStoreItemEntity() {
-        return storeItemEntity;
-    }
-
-    public void setStoreItemEntity(StoreItemEntity storeItemEntity) {
-        this.storeItemEntity = storeItemEntity;
+    public StoreItemCustomerRatingEntity(Integer id, Integer customerId, Integer storeItemId, Double rating) {
+        this.id = id;
+        this.customerId = customerId;
+        this.storeitemId = storeItemId;
+        this.rating = rating;
     }
 
     public Double getRating() {
@@ -44,5 +38,29 @@ public class StoreItemCustomerRatingEntity {
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    public Integer getStoreItemId() {
+        return storeitemId;
+    }
+
+    public void setStoreItemId(Integer storeItemId) {
+        this.storeitemId = storeItemId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

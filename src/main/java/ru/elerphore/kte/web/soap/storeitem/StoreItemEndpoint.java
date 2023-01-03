@@ -14,6 +14,7 @@ import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingRepo
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,24 +63,39 @@ public class StoreItemEndpoint implements StoreItemEndpointInterface {
     }
 
     @Override
-    public StoreItemResponse getStoreItemDescription(Long customerId, Long storeItemId) {
+    public StoreItemResponse getStoreItemDescription(Integer customerId, Integer storeItemId) {
 
-        List<String> list = entityManager
-                .createNativeQuery(
-            "select cast(json_object_agg(rating, amount) as text) from (select distinct count(rating) as amount from store_item_customer_rating where storeitem_id = 1 group by rating) as ratingAmount, store_item_customer_rating where storeitem_id = 1"
-                )
-                .getResultList();
+        String query =
+                "select cast(json_object_agg(rating, amount) as text) from (select distinct count(rating) as amount from store_item_customer_rating where storeitem_id = 1 group by rating) as ratingAmount, store_item_customer_rating where storeitem_id = " + storeItemId;
+        List<String> list = entityManager.createNativeQuery(query).getResultList();
 
-        Map<String, Integer> map;
+        Map<String, Integer> ratingDistribution;
 
         try {
-            map = new ObjectMapper().readValue(list.get(0), Map.class);
+            ratingDistribution = new ObjectMapper().readValue(list.get(0), Map.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
 
-        Long averageStoreItemRating = storeItemCustomerRatingRepository.countAverageStoreItemRating(1L);
+        Double averageStoreItemRating = storeItemCustomerRatingRepository.countAverageStoreItemRating(storeItemId);
+
+        StoreItemCustomerRatingEntity storeItemCustomerRatingEntity = storeItemCustomerRatingRepository.findAllByCustomerIdAndStoreItemId(customerId, storeItemId);
+
         StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItemId).get();
-        return null;
+
+        StoreItem storeItem = new StoreItem(
+                                    storeItemEntity.getId(),
+                                    storeItemEntity.getName(),
+                                    storeItemEntity.getPrice(),
+                                    storeItemEntity.getDescription(),
+                                    averageStoreItemRating,
+                                    storeItemCustomerRatingEntity.getRating(),
+                                    ratingDistribution
+                            );
+
+        StoreItemResponse storeItemResponse = new StoreItemResponse();
+        storeItemResponse.setItems(Arrays.asList(storeItem));
+
+        return storeItemResponse;
     }
 }

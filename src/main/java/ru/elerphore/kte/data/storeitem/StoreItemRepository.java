@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StoreItemRepository extends JpaRepository<StoreItemEntity, Long> {
+public interface StoreItemRepository extends JpaRepository<StoreItemEntity, Integer> {
     @Override
     List<StoreItemEntity> findAll();
 }

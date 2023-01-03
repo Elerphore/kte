@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public class StoreItem {
-    public Long id;
+    public Integer id;
     public String name;
     public BigDecimal price;
 
@@ -12,22 +12,22 @@ public class StoreItem {
 
     public Double averageRating;
     public Double customerRating;
-    public Map<Integer, Integer> ratingDistribution;
+    public Map<String, Integer> ratingDistribution;
 
-    public StoreItem(Long id, String name, BigDecimal price) {
+    public StoreItem(Integer id, String name, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.price = price;
     }
 
     public StoreItem(
-            Long id,
+            Integer id,
             String name,
             BigDecimal price,
             String description,
             Double averageRating,
             Double customerRating,
-            Map<Integer, Integer> ratingDistribution) {
+            Map<String, Integer> ratingDistribution) {
 
         this.id = id;
         this.name = name;

@@ -19,7 +19,7 @@ public interface StoreItemEndpointInterface {
     @RequestWrapper(localName = "StoreItemDescriptionRequest")
     @ResponseWrapper(className = "StoreItemResponse")
     StoreItemResponse getStoreItemDescription(
-            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Long customerId,
-            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Long storeItemId
+            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
+            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId
     );
 }
