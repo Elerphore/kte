@@ -1,12 +1,12 @@
 package ru.elerphore.kte.data.customer;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<CustomerEntity, Long> {
+public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
     @Override
     List<CustomerEntity> findAll();
 }

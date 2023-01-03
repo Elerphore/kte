@@ -6,14 +6,14 @@ import java.util.List;
 
 @XmlType(name = "StoreItemResponse", namespace = "http://kte.assigment.application")
 public class StoreItemResponse {
-    private List<StoreItemEntity> items;
+    private List<StoreItem> items;
 
     @XmlElement(required = true, name="items")
-    public List<StoreItemEntity> getItems() {
+    public List<StoreItem> getItems() {
         return items;
     }
 
-    public void setItems(List<StoreItemEntity> items) {
+    public void setItems(List<StoreItem> items) {
         this.items = items;
     }
 }

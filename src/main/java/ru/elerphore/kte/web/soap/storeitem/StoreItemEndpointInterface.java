@@ -14,4 +14,12 @@ public interface StoreItemEndpointInterface {
     @RequestWrapper(localName = "StoreItemRequest")
     @ResponseWrapper(className = "StoreItemResponse")
     StoreItemResponse getStoreItems();
+
+    @WebResult(name = "response", targetNamespace = "")
+    @RequestWrapper(localName = "StoreItemDescriptionRequest")
+    @ResponseWrapper(className = "StoreItemResponse")
+    StoreItemResponse getStoreItemDescription(
+            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Long customerId,
+            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Long storeItemId
+    );
 }
