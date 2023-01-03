@@ -7,6 +7,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
+import java.math.BigDecimal;
 
 @WebService(name = "StoreItem", targetNamespace = "http://kte.assigment.application")
 public interface StoreItemEndpointInterface {
@@ -30,5 +31,14 @@ public interface StoreItemEndpointInterface {
             @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
             @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId,
             @WebParam(name = "rating", targetNamespace = "http://kte.assigment.application") Integer rating
+    );
+
+    @WebResult(name = "response", targetNamespace = "")
+    @RequestWrapper(localName = "StoreItemTotalPriceRequest")
+//    @ResponseWrapper(className = "StoreItemResponse")
+    BigDecimal getTotalPrice(
+            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
+            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId,
+            @WebParam(name = "amount", targetNamespace = "http://kte.assigment.application") BigDecimal amount
     );
 }

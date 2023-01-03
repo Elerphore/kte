@@ -35,7 +35,7 @@ public class CustomerEndpoint implements CustomerEndpointInterface {
     }
 
     @Override
-    public CustomerResponse updateCustomerDiscounts(Long customerId, Long discountOneId, Long discountTwoId) {
+    public CustomerResponse updateCustomerDiscounts(Integer customerId, Integer discountOneId, Integer discountTwoId) {
         CustomerEntity customerEntity = customerRepository.findById(customerId).get();
 
         if(discountOneId != null) {

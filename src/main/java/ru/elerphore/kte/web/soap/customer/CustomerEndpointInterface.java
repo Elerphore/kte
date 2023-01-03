@@ -19,8 +19,8 @@ public interface CustomerEndpointInterface {
     @RequestWrapper(localName = "CustomerUpdateRequest")
     @ResponseWrapper(className = "CustomerResponse")
     CustomerResponse updateCustomerDiscounts(
-            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Long customerId,
-            @WebParam(name = "discountOne", targetNamespace = "http://kte.assigment.application") Long discountOneId,
-            @WebParam(name = "discountTwo", targetNamespace = "http://kte.assigment.application") Long discountTwoId
+            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
+            @WebParam(name = "discountOne", targetNamespace = "http://kte.assigment.application") Integer discountOneId,
+            @WebParam(name = "discountTwo", targetNamespace = "http://kte.assigment.application") Integer discountTwoId
     );
 }

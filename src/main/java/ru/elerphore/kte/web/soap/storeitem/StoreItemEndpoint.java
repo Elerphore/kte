@@ -2,6 +2,7 @@ package ru.elerphore.kte.web.soap.storeitem;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
 import ru.elerphore.kte.data.storeitem.StoreItem;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
@@ -9,9 +10,11 @@ import ru.elerphore.kte.data.storeitem.StoreItemRepository;
 import ru.elerphore.kte.data.storeitem.StoreItemResponse;
 import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingEntity;
 import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingRepository;
+import ru.elerphore.kte.services.OrderCalculator;
 
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -109,5 +112,14 @@ public class StoreItemEndpoint implements StoreItemEndpointInterface {
         }
 
         storeItemCustomerRatingRepository.save(storeItemCustomerRatingEntity);
+    }
+
+    @Override
+    public BigDecimal getTotalPrice(Integer customerId, Integer storeItemId, BigDecimal amount) {
+        CustomerEntity customerEntity = customerRepository.findById(customerId).get();
+        StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItemId).get();
+
+
+        return new OrderCalculator().calculate(customerEntity, storeItemEntity, amount);
     }
 }

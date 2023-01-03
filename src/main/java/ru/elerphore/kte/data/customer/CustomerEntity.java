@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
 public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column
     private String name;
@@ -26,12 +26,12 @@ public class CustomerEntity {
     @JoinColumn(name = "discount_2")
     private DiscountEntity discountTwo;
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @XmlElement(required = true, name="id")
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
