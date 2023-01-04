@@ -119,7 +119,6 @@ public class StoreItemEndpoint implements StoreItemEndpointInterface {
         CustomerEntity customerEntity = customerRepository.findById(customerId).get();
         StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItemId).get();
 
-
         return new OrderCalculator().calculate(customerEntity, storeItemEntity, amount);
     }
 }

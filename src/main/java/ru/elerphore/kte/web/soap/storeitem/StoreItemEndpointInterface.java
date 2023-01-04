@@ -33,7 +33,7 @@ public interface StoreItemEndpointInterface {
             @WebParam(name = "rating", targetNamespace = "http://kte.assigment.application") Integer rating
     );
 
-    @WebResult(name = "response", targetNamespace = "")
+    @WebResult(name = "totalPrice", targetNamespace = "")
     @RequestWrapper(localName = "StoreItemTotalPriceRequest")
 //    @ResponseWrapper(className = "StoreItemResponse")
     BigDecimal getTotalPrice(
