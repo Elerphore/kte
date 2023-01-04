@@ -39,17 +39,12 @@ public class StoreItemEntity {
 
     }
 
-    public StoreItemEntity(Integer id, String name, BigDecimal price) {
+    public StoreItemEntity(Integer id, String name, BigDecimal price, String description, Double averageRating) {
         this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    public StoreItemEntity(Integer id, String name, BigDecimal price, DiscountEntity discount) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.discount = discount;
+        this.description = description;
+        this.averageRating = averageRating;
     }
 
     public Integer getId() {
