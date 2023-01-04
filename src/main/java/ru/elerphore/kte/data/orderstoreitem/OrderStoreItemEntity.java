@@ -4,53 +4,55 @@ import ru.elerphore.kte.data.order.OrderEntity;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity(name = "order_storeitem")
 public class OrderStoreItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private OrderEntity orderEntity;
+    OrderEntity order;
 
     @ManyToOne
     @JoinColumn(name = "storeitem_id")
-    private StoreItemEntity storeItemEntity;
+    private StoreItemEntity storeItem;
 
     @Column
-    private Integer amount;
+    private BigDecimal amount;
 
-    public Integer getId() {
-        return id;
+    public OrderStoreItemEntity(StoreItemEntity storeItem, BigDecimal amount) {
+        this.storeItem = storeItem;
+        this.amount = amount;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public OrderStoreItemEntity() {
+
     }
 
-    public OrderEntity getOrderEntity() {
-        return orderEntity;
+    public OrderEntity getOrder() {
+        return order;
     }
 
-    public void setOrderEntity(OrderEntity orderEntity) {
-        this.orderEntity = orderEntity;
+    public void setOrder(OrderEntity orderEntity) {
+        this.order = orderEntity;
     }
 
-    public StoreItemEntity getStoreItemEntity() {
-        return storeItemEntity;
+    public StoreItemEntity getStoreItem() {
+        return storeItem;
     }
 
-    public void setStoreItemEntity(StoreItemEntity storeItemEntity) {
-        this.storeItemEntity = storeItemEntity;
+    public void setStoreItem(StoreItemEntity storeItemEntity) {
+        this.storeItem = storeItemEntity;
     }
 
-    public Integer getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 }

@@ -7,9 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.cxf.Bus;
 import ru.elerphore.kte.data.customer.CustomerRepository;
 import ru.elerphore.kte.data.discount.DiscountRepository;
+import ru.elerphore.kte.data.order.OrderRepository;
 import ru.elerphore.kte.data.storeitem.StoreItemRepository;
 import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingRepository;
+import ru.elerphore.kte.services.OrderService;
 import ru.elerphore.kte.web.soap.customer.CustomerEndpoint;
+import ru.elerphore.kte.web.soap.orders.OrderEndpoint;
 import ru.elerphore.kte.web.soap.storeitem.StoreItemEndpoint;
 
 import javax.persistence.EntityManager;
@@ -36,6 +39,12 @@ public class WebServiceConfig {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Bean
     public Endpoint customersEndpoint() {
         EndpointImpl endpoint = new EndpointImpl(bus, new CustomerEndpoint(customerRepository, discountRepository));
@@ -55,6 +64,21 @@ public class WebServiceConfig {
                         )
                 );
         endpoint.publish("/storeitems");
+        return endpoint;
+    }
+
+    @Bean Endpoint orderEndpoint() {
+        EndpointImpl endpoint =
+                new EndpointImpl(
+                        bus,
+                        new OrderEndpoint(
+                                orderService,
+                                orderRepository,
+                                customerRepository,
+                                storeItemRepository
+                        )
+                );
+        endpoint.publish("/orders");
         return endpoint;
     }
 

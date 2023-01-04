@@ -66,5 +66,3 @@ create table order_storeitem(
     constraint fk_order foreign key (order_id) references orders(id) on delete cascade on update cascade,
     constraint fk_storeitem foreign key (storeitem_id) references storeitems(id) on delete cascade on update cascade
 );
-
-select * from order_storeitem;

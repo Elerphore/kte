@@ -1,7 +1,10 @@
 package ru.elerphore.kte.data.storeitem;
 
+import ru.elerphore.kte.data.orderstoreitem.OrderStoreItemEntity;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity(name = "storeitems")
 public class StoreItemEntity {
@@ -20,6 +23,12 @@ public class StoreItemEntity {
 
     @Column(name = "average_rating")
     private Double averageRating;
+
+    @OneToMany(mappedBy = "storeItem")
+    private List<OrderStoreItemEntity> orderStoreItemEntityList;
+
+    @Transient
+    private BigDecimal amount;
 
     public Integer getId() {
         return id;
@@ -59,5 +68,13 @@ public class StoreItemEntity {
 
     public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }

@@ -1,12 +1,15 @@
 package ru.elerphore.kte.services;
 
 import ru.elerphore.kte.data.customer.CustomerEntity;
+import ru.elerphore.kte.data.order.OrderRequest;
+import ru.elerphore.kte.data.storeitem.StoreItem;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class OrderCalculator {
-    public BigDecimal calculate(
+    static public BigDecimal calculate(
             CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount
     ) {
         BigDecimal totalPrice = storeItemEntity.getPrice().multiply(amount);
@@ -26,4 +29,14 @@ public class OrderCalculator {
 
         return totalPrice;
     };
+
+    static public BigDecimal calculateOrderRequestPrice(CustomerEntity customerEntity, List<StoreItemEntity> storeItemEntityList) {
+
+        BigDecimal correctedPrice = storeItemEntityList
+                                    .stream()
+                                    .map(orderItem -> calculate(customerEntity, orderItem, orderItem.getAmount()))
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return correctedPrice;
+    }
 }
