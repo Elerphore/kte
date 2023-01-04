@@ -39,15 +39,17 @@ public class DiscountService {
             storeItemRepository.save(lastStoreItemEntity);
         }
 
-        DiscountEntity discountEntity = discountRepository.findById(discountId).get();
-
         List<StoreItemEntity> storeItemEntityList = storeItemRepository.findAllByDiscountNull();
 
-        StoreItemEntity storeItemEntity = storeItemRepository.findAllByDiscountNull()
-                                            .get(random.ints(0, storeItemEntityList.size()).findFirst().getAsInt());
+        if(storeItemEntityList.size() > 0) {
+            DiscountEntity discountEntity = discountRepository.findById(discountId).get();
 
-        storeItemEntity.setDiscount(discountEntity);
+            StoreItemEntity storeItemEntity = storeItemEntityList
+                    .get(random.ints(0, storeItemEntityList.size()).findFirst().getAsInt());
 
-        lastStoreItemEntity = storeItemRepository.save(storeItemEntity);
+            storeItemEntity.setDiscount(discountEntity);
+
+            lastStoreItemEntity = storeItemRepository.save(storeItemEntity);
+        }
     }
 }
