@@ -23,6 +23,12 @@ public class OrderStoreItemEntity {
     @Column
     private BigDecimal amount;
 
+    @Column
+    private BigDecimal price;
+
+    @Column
+    private BigDecimal discount;
+
     public OrderStoreItemEntity(StoreItemEntity storeItem, BigDecimal amount) {
         this.storeItem = storeItem;
         this.amount = amount;
@@ -54,5 +60,21 @@ public class OrderStoreItemEntity {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(BigDecimal discount) {
+        this.discount = discount;
     }
 }

@@ -1,5 +1,6 @@
 package ru.elerphore.kte.web.soap.orders;
 
+import org.hibernate.criterion.Order;
 import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
 import ru.elerphore.kte.data.order.OrderEntity;
@@ -53,8 +54,18 @@ public class OrderEndpoint implements OrderEndpointInterface{
                 })
                 .collect(Collectors.toList());
 
-        BigDecimal correctedPrice = OrderCalculator.calculateCorrectionPrice(customerEntity,
-                                        orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList()));
+        BigDecimal correctedPrice = orderStoreItemEntityList
+                                        .stream()
+                                        .map(orderStoreItemEntity -> {
+                                            BigDecimal discountSum = OrderCalculator.calculateDiscountSum(customerEntity, orderStoreItemEntity.getStoreItem(), orderStoreItemEntity.getStoreItem().getAmount());
+                                            BigDecimal totalItemPrice = orderStoreItemEntity.getStoreItem().getPrice().multiply(orderStoreItemEntity.getStoreItem().getAmount());
+
+                                            orderStoreItemEntity.setPrice(totalItemPrice);
+                                            orderStoreItemEntity.setDiscount(discountSum);
+
+                                            return totalItemPrice.subtract(discountSum);
+                                        })
+                                        .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal price = OrderCalculator.calculateTotalPrice(customerEntity,
                                         orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList()));

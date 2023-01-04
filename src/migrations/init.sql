@@ -85,7 +85,11 @@ create table order_storeitem(
     order_id integer,
     storeitem_id integer,
     amount integer,
+    price double precision,
+    discount double precision,
 
     constraint fk_order foreign key (order_id) references orders(id) on delete cascade on update cascade,
     constraint fk_storeitem foreign key (storeitem_id) references storeitems(id) on delete cascade on update cascade
 );
+
+drop table order_storeitem;

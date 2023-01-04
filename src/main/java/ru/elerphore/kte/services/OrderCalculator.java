@@ -7,6 +7,21 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderCalculator {
+    static public BigDecimal calculateDiscountSum(CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount) {
+        BigDecimal totalPrice = storeItemEntity.getPrice().multiply(amount);
+        BigDecimal discount = BigDecimal.ONE;
+
+        if(amount.compareTo(BigDecimal.valueOf(5)) == -1 && customerEntity.getDiscountOne() != null) {
+            discount = customerEntity.getDiscountOne().getDiscountValue();
+        }
+
+        if(amount.compareTo(BigDecimal.valueOf(5)) == 1 && customerEntity.getDiscountTwo() != null) {
+            discount = customerEntity.getDiscountTwo().getDiscountValue();
+        }
+
+        return discount;
+    }
+
     static public BigDecimal calculate(
             CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount
     ) {

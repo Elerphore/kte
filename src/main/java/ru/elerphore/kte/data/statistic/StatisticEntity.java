@@ -9,15 +9,18 @@ import java.math.BigDecimal;
 @Entity(name = "statistics")
 public class StatisticEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
     private StatisticTypeEnum statisticType;
 
-    @OneToOne(mappedBy = "id")
+    @ManyToOne
+    @JoinColumn(name = "storeitem_id")
     private StoreItemEntity storeItem;
 
-    @OneToOne(mappedBy = "id")
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
 
     @Column
@@ -56,5 +59,21 @@ public class StatisticEntity {
 
     public void setCustomer(CustomerEntity customer) {
         this.customer = customer;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getDiscountSum() {
+        return discountSum;
+    }
+
+    public void setDiscountSum(BigDecimal discountSum) {
+        this.discountSum = discountSum;
     }
 }
