@@ -53,7 +53,6 @@ public class OrderEndpoint implements OrderEndpointInterface{
                 })
                 .collect(Collectors.toList());
 
-
         BigDecimal price = OrderCalculator.calculateOrderRequestPrice(
                 customerEntity,
                 orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList())
