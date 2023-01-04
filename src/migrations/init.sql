@@ -24,8 +24,13 @@ create table storeitems(
     storeitem_name varchar(45) not null,
     price double precision not null,
     description varchar(200) not null DEFAULT '',
-    average_rating double precision default 0 not null
+    average_rating double precision default 0 not null,
+    discount_id integer,
+
+    constraint fk_discount1 foreign key (discount_id) references discounts(id) on delete cascade on update cascade
 );
+
+drop table storeitems;
 
 insert into storeitems(storeitem_name, price) values ('Яблоко', 11), ('Банан', 25), ('Груша', 16);
 
@@ -66,3 +71,5 @@ create table order_storeitem(
     constraint fk_order foreign key (order_id) references orders(id) on delete cascade on update cascade,
     constraint fk_storeitem foreign key (storeitem_id) references storeitems(id) on delete cascade on update cascade
 );
+
+drop table order_storeitem;

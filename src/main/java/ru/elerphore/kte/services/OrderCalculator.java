@@ -1,8 +1,6 @@
 package ru.elerphore.kte.services;
 
 import ru.elerphore.kte.data.customer.CustomerEntity;
-import ru.elerphore.kte.data.order.OrderRequest;
-import ru.elerphore.kte.data.storeitem.StoreItem;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
 
 import java.math.BigDecimal;

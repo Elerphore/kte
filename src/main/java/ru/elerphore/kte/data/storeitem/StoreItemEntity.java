@@ -1,5 +1,6 @@
 package ru.elerphore.kte.data.storeitem;
 
+import ru.elerphore.kte.data.discount.DiscountEntity;
 import ru.elerphore.kte.data.orderstoreitem.OrderStoreItemEntity;
 
 import javax.persistence.*;
@@ -24,11 +25,32 @@ public class StoreItemEntity {
     @Column(name = "average_rating")
     private Double averageRating;
 
+    @OneToOne
+    @JoinColumn(name = "discount_id")
+    private DiscountEntity discount;
+
     @OneToMany(mappedBy = "storeItem")
     private List<OrderStoreItemEntity> orderStoreItemEntityList;
 
     @Transient
     private BigDecimal amount;
+
+    public StoreItemEntity() {
+
+    }
+
+    public StoreItemEntity(Integer id, String name, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public StoreItemEntity(Integer id, String name, BigDecimal price, DiscountEntity discount) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.discount = discount;
+    }
 
     public Integer getId() {
         return id;
@@ -76,5 +98,13 @@ public class StoreItemEntity {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public DiscountEntity getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(DiscountEntity discount) {
+        this.discount = discount;
     }
 }
