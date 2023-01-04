@@ -37,4 +37,21 @@ public class OrderCalculator {
 
         return correctedPrice;
     }
+
+    static public BigDecimal calculateCorrectionPrice(CustomerEntity customerEntity, List<StoreItemEntity> storeItemEntityList) {
+        BigDecimal correctedPrice = storeItemEntityList
+                .stream()
+                .map(orderItem -> calculate(customerEntity, orderItem, orderItem.getAmount()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return correctedPrice;
+    }
+
+    static public BigDecimal calculateTotalPrice(CustomerEntity customerEntity, List<StoreItemEntity> storeItemEntityList) {
+        return storeItemEntityList
+                .stream()
+                .map(orderItem -> orderItem.getPrice().multiply(orderItem.getAmount()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    }
 }

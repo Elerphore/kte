@@ -2,9 +2,9 @@ package ru.elerphore.kte.data.order;
 
 import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.orderstoreitem.OrderStoreItemEntity;
-import ru.elerphore.kte.data.storeitem.StoreItemEntity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,6 +21,12 @@ public class OrderEntity {
     @Column
     private LocalDateTime createDate = LocalDateTime.now();
 
+    @Column
+    private BigDecimal discountSum;
+
+    @Column
+    private BigDecimal totalPrice;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderStoreItemEntity> orderStoreItemEntityList;
 
@@ -31,10 +37,12 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(CustomerEntity customerEntity, String orderNumber, List<OrderStoreItemEntity> orderStoreItemEntityList) {
+    public OrderEntity(CustomerEntity customerEntity, String orderNumber, List<OrderStoreItemEntity> orderStoreItemEntityList, BigDecimal discountSum, BigDecimal totalPrice) {
         this.customerEntity = customerEntity;
         this.orderNumber = orderNumber;
         this.orderStoreItemEntityList = orderStoreItemEntityList;
+        this.discountSum = discountSum;
+        this.totalPrice = totalPrice;
     }
 
     public Integer getId() {
@@ -75,5 +83,21 @@ public class OrderEntity {
 
     public void setOrderStoreItemEntityList(List<OrderStoreItemEntity> orderStoreItemEntityList) {
         this.orderStoreItemEntityList = orderStoreItemEntityList;
+    }
+
+    public BigDecimal getDiscountSum() {
+        return discountSum;
+    }
+
+    public void setDiscountSum(BigDecimal discountSum) {
+        this.discountSum = discountSum;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }

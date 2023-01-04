@@ -32,7 +32,7 @@ public class DiscountService {
         this.entityManager = entityManager;
     }
 
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 360000)
     void discountStoreItemSelection() {
         if(lastStoreItemEntity != null) {
             lastStoreItemEntity.setDiscount(null);

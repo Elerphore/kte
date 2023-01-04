@@ -53,10 +53,13 @@ public class OrderEndpoint implements OrderEndpointInterface{
                 })
                 .collect(Collectors.toList());
 
-        BigDecimal price = OrderCalculator.calculateOrderRequestPrice(
-                customerEntity,
-                orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList())
-        );
+        BigDecimal correctedPrice = OrderCalculator.calculateCorrectionPrice(customerEntity,
+                                        orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList()));
+
+        BigDecimal price = OrderCalculator.calculateTotalPrice(customerEntity,
+                                        orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList()));
+
+        BigDecimal discountSum = price.subtract(correctedPrice);
 
         if(!price.equals(totalPrice)) {
             throw new UnaccurateTotalPriceSumException();
@@ -64,9 +67,7 @@ public class OrderEndpoint implements OrderEndpointInterface{
 
         String orderNumber = orderService.generateOrderNumber();
 
-        final OrderEntity orderEntity = orderRepository.save(
-                new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList)
-        );
+        final OrderEntity orderEntity = orderRepository.save(new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList, price, discountSum));
 
         orderStoreItemEntityList.stream().map(orderStoreItemEntity -> {
             orderStoreItemEntity.setOrder(orderEntity);
