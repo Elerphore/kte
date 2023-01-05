@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.elerphore.kte.data.storeitem.StoreItemRequest;
 import ru.elerphore.kte.data.storeitem.StoreItemResponse;
+import ru.elerphore.kte.services.storeitem.ImpossibleToParseRatingDistributionException;
 import ru.elerphore.kte.services.storeitem.StoreItemService;
 
 import javax.jws.WebParam;
@@ -28,7 +29,7 @@ public interface StoreItemEndpointInterface {
     @RequestWrapper(localName = "StoreItemDescriptionRequest")
     @ResponseWrapper(className = "StoreItemResponse")
     @PostMapping(path = "/description")
-    StoreItemResponse getStoreItemDescription(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest);
+    StoreItemResponse getStoreItemDescription(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest) throws ImpossibleToParseRatingDistributionException;
 
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "CustomerStoreItemRatingRequest")

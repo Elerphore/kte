@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class OrderService {
@@ -51,7 +52,7 @@ public class OrderService {
 
     @PostConstruct
     private void generateRandomPrefix() {
-        orderNumberPrefix = String.join("", Arrays.asList(1, 2).stream().map(n -> "" + getRandomChar()).collect(Collectors.toList()));
+        orderNumberPrefix = Stream.of(1, 2).map(n -> "" + getRandomChar()).collect(Collectors.joining(""));
     }
 
     public String newOrder(Integer customerId, OrderRequest orderRequest, BigDecimal totalPrice) throws UnaccurateTotalPriceSumException {
@@ -80,8 +81,7 @@ public class OrderService {
                 })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal price = OrderCalculator.calculateTotalPrice(customerEntity,
-                orderStoreItemEntityList.stream().map(orderStoreItemEntity -> orderStoreItemEntity.getStoreItem()).collect(Collectors.toList()));
+        BigDecimal price = OrderCalculator.calculateTotalPrice(customerEntity, orderStoreItemEntityList.stream().map(OrderStoreItemEntity::getStoreItem).collect(Collectors.toList()));
 
         BigDecimal discountSum = price.subtract(correctedPrice);
 
@@ -93,11 +93,8 @@ public class OrderService {
 
         final OrderEntity orderEntity = orderRepository.save(new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList, price, discountSum));
 
-        orderStoreItemEntityList.stream().map(orderStoreItemEntity -> {
-                    orderStoreItemEntity.setOrder(orderEntity);
-                    return orderStoreItemEntity;
-                })
-                .collect(Collectors.toList());
+        orderStoreItemEntityList = orderStoreItemEntityList.stream().peek(orderStoreItemEntity -> orderStoreItemEntity.setOrder(orderEntity)).collect(Collectors.toList());
+        orderEntity.setOrderStoreItemEntityList(orderStoreItemEntityList);
 
         orderRepository.save(orderEntity);
 

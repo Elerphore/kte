@@ -3,7 +3,6 @@ package ru.elerphore.kte.services.storeitem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
 import ru.elerphore.kte.data.storeitem.StoreItem;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
@@ -13,9 +12,8 @@ import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingEnti
 import ru.elerphore.kte.data.storeitemcustomerrating.StoreItemCustomerRatingRepository;
 import ru.elerphore.kte.services.order.OrderCalculator;
 
-import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,23 +23,16 @@ public class StoreItemService {
     private final StoreItemRepository storeItemRepository;
     private final CustomerRepository customerRepository;
     private final StoreItemCustomerRatingRepository storeItemCustomerRatingRepository;
-    private final EntityManager entityManager;
 
-    public StoreItemService(StoreItemRepository storeItemRepository, CustomerRepository customerRepository, StoreItemCustomerRatingRepository storeItemCustomerRatingRepository, EntityManager entityManager) {
+    public StoreItemService(StoreItemRepository storeItemRepository, CustomerRepository customerRepository, StoreItemCustomerRatingRepository storeItemCustomerRatingRepository) {
         this.customerRepository = customerRepository;
         this.storeItemRepository = storeItemRepository;
         this.storeItemCustomerRatingRepository = storeItemCustomerRatingRepository;
-        this.entityManager = entityManager;
     }
 
     public StoreItemResponse getStoreItems() {
         List<StoreItemEntity> storeItemEntities = storeItemRepository.findAll();
-        List<StoreItem> storeItems = storeItemEntities
-                .stream()
-                .map(storeItem ->
-                        new StoreItem(storeItem.getId(), storeItem.getName(), storeItem.getPrice())
-                )
-                .collect(Collectors.toList());
+        List<StoreItem> storeItems = storeItemEntities.stream().map(storeItem -> new StoreItem(storeItem.getId(), storeItem.getName(), storeItem.getPrice())).collect(Collectors.toList());
 
         StoreItemResponse storeItemResponse = new StoreItemResponse();
         storeItemResponse.setItems(storeItems);
@@ -49,18 +40,13 @@ public class StoreItemService {
         return storeItemResponse;
     }
 
-    public StoreItemResponse getStoreItemDescription(Integer customerId, Integer storeItemId) {
-
-        String query =
-                "select cast(json_object_agg(rating, amount) as text) from (select distinct count(rating) as amount from store_item_customer_rating where storeitem_id = 1 group by rating) as ratingAmount, store_item_customer_rating where storeitem_id = " + storeItemId;
-        List<String> list = entityManager.createNativeQuery(query).getResultList();
-
+    public StoreItemResponse getStoreItemDescription(Integer customerId, Integer storeItemId) throws ImpossibleToParseRatingDistributionException {
         Map<String, Integer> ratingDistribution;
 
         try {
-            ratingDistribution = new ObjectMapper().readValue(list.get(0), Map.class);
+            ratingDistribution = new ObjectMapper().readValue(storeItemCustomerRatingRepository.findAllRatingDistribution(storeItemId).get(0), Map.class);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new ImpossibleToParseRatingDistributionException();
         }
 
         Double averageStoreItemRating = storeItemCustomerRatingRepository.countAverageStoreItemRating(storeItemId);
@@ -79,10 +65,7 @@ public class StoreItemService {
                 ratingDistribution
         );
 
-        StoreItemResponse storeItemResponse = new StoreItemResponse();
-        storeItemResponse.setItems(Arrays.asList(storeItem));
-
-        return storeItemResponse;
+        return new StoreItemResponse(Collections.singletonList(storeItem));
     }
 
     public void setCustomerStoreItemRating(Integer customerId, Integer storeItemId, Integer rating) {

@@ -8,6 +8,10 @@ import ru.elerphore.kte.services.customer.CustomerService;
 
 import javax.jws.WebService;
 
+/**
+ * Разработать backend с soap сервисом и дублирующим restFull
+ * */
+
 @WebService(serviceName = "CustomerEndpoint", portName = "CustomerPort", targetNamespace = "http://kte.assigment.application", endpointInterface = "ru.elerphore.kte.web.customer.CustomerEndpointInterface")
 @RestController
 @RequestMapping(path = "/rest/customers")
@@ -21,10 +25,18 @@ public class CustomerEndpoint implements CustomerEndpointInterface {
         this.customerService = customerService;
     }
 
+    /**
+     * 1. список клиентов (все атрибуты).
+    * */
+
     @Override
     public CustomerResponse getCustomers() {
         return customerService.getCustomers();
     }
+
+    /**
+     * 2. изменение индивидуальных скидок клиента (входные параметры: идентификатор, скидка 1, скидка 2).
+     * */
 
     @Override
     public CustomerResponse updateCustomerDiscounts(CustomerRequest customerRequest) {

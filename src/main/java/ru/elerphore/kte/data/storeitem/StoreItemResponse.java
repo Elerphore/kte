@@ -8,6 +8,12 @@ import java.util.List;
 public class StoreItemResponse {
     private List<StoreItem> items;
 
+    public StoreItemResponse() { }
+
+    public StoreItemResponse(List<StoreItem> items) {
+        this.items = items;
+    }
+
     @XmlElement(required = true, name="items")
     public List<StoreItem> getItems() {
         return items;
