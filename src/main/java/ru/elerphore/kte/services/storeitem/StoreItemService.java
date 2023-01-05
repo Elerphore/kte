@@ -82,6 +82,12 @@ public class StoreItemService {
     }
 
     public BigDecimal getTotalPrice(Integer customerId, Integer storeItemId, BigDecimal amount) {
-        return OrderCalculator.calculate(customerRepository.findById(customerId).get(), storeItemRepository.findById(storeItemId).get(), amount);
+
+        StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItemId).get();
+
+        BigDecimal discountSum = OrderCalculator.calculateItemDiscountSum(customerRepository.findById(customerId).get(), storeItemEntity, amount);
+        BigDecimal totalPrice = OrderCalculator.calculateItemTotalPrice(storeItemEntity, amount);
+
+        return OrderCalculator.calculateItemSumPrice(totalPrice, discountSum);
     }
 }

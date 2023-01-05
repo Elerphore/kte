@@ -12,6 +12,10 @@ repositories {
 	mavenCentral()
 }
 
+/**
+ * Технологии: springBoot, JPA(Hibernate), restfull, apache cxf, PostgreSQL, java 8, gradle.
+ * */
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

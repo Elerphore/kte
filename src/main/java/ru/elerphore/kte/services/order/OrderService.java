@@ -14,7 +14,6 @@ import ru.elerphore.kte.web.orders.UnaccurateTotalPriceSumException;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -75,7 +74,7 @@ public class OrderService {
         BigDecimal correctedPrice = orderStoreItemEntityList
                 .stream()
                 .map(orderStoreItemEntity -> {
-                    BigDecimal discountSum = OrderCalculator.calculateDiscountSum(customerEntity, orderStoreItemEntity.getStoreItem(), orderStoreItemEntity.getStoreItem().getAmount());
+                    BigDecimal discountSum = OrderCalculator.calculateItemDiscountSum(customerEntity, orderStoreItemEntity.getStoreItem(), orderStoreItemEntity.getStoreItem().getAmount());
                     BigDecimal totalItemPrice = orderStoreItemEntity.getStoreItem().getPrice().multiply(orderStoreItemEntity.getStoreItem().getAmount());
 
                     orderStoreItemEntity.setPrice(totalItemPrice);
