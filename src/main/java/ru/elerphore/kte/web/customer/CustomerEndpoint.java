@@ -1,12 +1,15 @@
-package ru.elerphore.kte.web.soap.customer;
+package ru.elerphore.kte.web.customer;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.elerphore.kte.data.customer.CustomerResponse;
 import ru.elerphore.kte.services.customer.CustomerService;
-import ru.elerphore.kte.web.interfaces.CustomerEndpointInterface;
 
 import javax.jws.WebService;
 
-@WebService(serviceName = "CustomerEndpoint", portName = "CustomerPort", targetNamespace = "http://kte.assigment.application", endpointInterface = "ru.elerphore.kte.web.interfaces.CustomerEndpointInterface")
+@WebService(serviceName = "CustomerEndpoint", portName = "CustomerPort", targetNamespace = "http://kte.assigment.application", endpointInterface = "ru.elerphore.kte.web.customer.CustomerEndpointInterface")
+@RestController
+@RequestMapping(path = "/rest/customers")
 public class CustomerEndpoint implements CustomerEndpointInterface {
 
     private CustomerService customerService;

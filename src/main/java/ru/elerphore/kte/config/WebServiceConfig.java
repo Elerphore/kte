@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import ru.elerphore.kte.services.customer.CustomerService;
 import ru.elerphore.kte.services.order.OrderService;
 import ru.elerphore.kte.services.storeitem.StoreItemService;
-import ru.elerphore.kte.web.soap.customer.CustomerEndpoint;
-import ru.elerphore.kte.web.soap.orders.OrderEndpoint;
-import ru.elerphore.kte.web.soap.storeitem.StoreItemEndpoint;
+import ru.elerphore.kte.web.customer.CustomerEndpoint;
+import ru.elerphore.kte.web.orders.OrderEndpoint;
+import ru.elerphore.kte.web.storeitem.StoreItemEndpoint;
 
 import javax.xml.ws.Endpoint;
 
@@ -43,7 +43,7 @@ public class WebServiceConfig {
         return endpoint;
     }
 
-    @Bean Endpoint orderEndpoint() {
+    @Bean Endpoint order() {
         EndpointImpl endpoint = new EndpointImpl(bus, new OrderEndpoint(orderService));
         endpoint.publish("/orders");
         return endpoint;

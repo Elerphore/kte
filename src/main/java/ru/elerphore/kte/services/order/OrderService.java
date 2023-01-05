@@ -10,7 +10,7 @@ import ru.elerphore.kte.data.order.OrderRequest;
 import ru.elerphore.kte.data.orderstoreitem.OrderStoreItemEntity;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
 import ru.elerphore.kte.data.storeitem.StoreItemRepository;
-import ru.elerphore.kte.web.soap.orders.UnaccurateTotalPriceSumException;
+import ru.elerphore.kte.web.orders.UnaccurateTotalPriceSumException;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -54,7 +54,7 @@ public class OrderService {
         orderNumberPrefix = String.join("", Arrays.asList(1, 2).stream().map(n -> "" + getRandomChar()).collect(Collectors.toList()));
     }
 
-    public String newOrder(Integer customerId, OrderRequest orderRequest, BigDecimal totalPrice) throws Exception {
+    public String newOrder(Integer customerId, OrderRequest orderRequest, BigDecimal totalPrice) throws UnaccurateTotalPriceSumException {
         CustomerEntity customerEntity = customerRepository.findById(customerId).get();
 
         List<OrderStoreItemEntity> orderStoreItemEntityList = orderRequest.getStoreItemList()

@@ -1,10 +1,8 @@
-package ru.elerphore.kte.web.interfaces;
+package ru.elerphore.kte.web.storeitem;
 
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.elerphore.kte.data.storeitem.StoreItemRequest;
 import ru.elerphore.kte.data.storeitem.StoreItemResponse;
 import ru.elerphore.kte.services.storeitem.StoreItemService;
@@ -30,32 +28,15 @@ public interface StoreItemEndpointInterface {
     @RequestWrapper(localName = "StoreItemDescriptionRequest")
     @ResponseWrapper(className = "StoreItemResponse")
     @PostMapping(path = "/description")
-    StoreItemResponse getStoreItemDescription(
-//            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application")
-//            @RequestParam(name = "customerId")
-//            Integer customerId,
-//
-//            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application")
-//            @RequestParam(name = "storeItemId")
-//            Integer storeItemId
-            @WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest
-    );
+    StoreItemResponse getStoreItemDescription(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest);
 
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "CustomerStoreItemRatingRequest")
     @ResponseWrapper(className = "StoreItemResponse")
-    void setCustomerStoreItemRating(
-            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
-            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId,
-            @WebParam(name = "rating", targetNamespace = "http://kte.assigment.application") Integer rating
-    );
+    void setCustomerStoreItemRating(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest);
 
     @WebResult(name = "totalPrice", targetNamespace = "")
     @RequestWrapper(localName = "StoreItemTotalPriceRequest")
 //    @ResponseWrapper(className = "StoreItemResponse")
-    BigDecimal getTotalPrice(
-            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
-            @WebParam(name = "storeItemId", targetNamespace = "http://kte.assigment.application") Integer storeItemId,
-            @WebParam(name = "amount", targetNamespace = "http://kte.assigment.application") BigDecimal amount
-    );
+    BigDecimal getTotalPrice(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest);
 }

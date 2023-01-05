@@ -1,4 +1,4 @@
-package ru.elerphore.kte.web.interfaces;
+package ru.elerphore.kte.web.customer;
 
 import ru.elerphore.kte.data.customer.CustomerResponse;
 
