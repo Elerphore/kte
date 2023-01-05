@@ -8,6 +8,12 @@ import java.util.List;
 public class CustomerResponse {
     private List<CustomerEntity> items;
 
+    public CustomerResponse() { }
+
+    public CustomerResponse(List<CustomerEntity> items) {
+        this.items = items;
+    }
+
     @XmlElement(required = true, name="items")
     public List<CustomerEntity> getItems() {
         return items;

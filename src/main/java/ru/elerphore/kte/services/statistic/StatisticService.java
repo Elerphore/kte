@@ -21,11 +21,11 @@ import java.util.List;
 @Service
 public class StatisticService {
 
-    private StatisticsRepository statisticsRepository;
-    private CustomerRepository customerRepository;
-    private StoreItemRepository storeItemRepository;
-    private OrderStoreItemRepository orderStoreItemRepository;
-    private OrderRepository orderRepository;
+    private final StatisticsRepository statisticsRepository;
+    private final CustomerRepository customerRepository;
+    private final StoreItemRepository storeItemRepository;
+    private final OrderStoreItemRepository orderStoreItemRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
     public StatisticService(StatisticsRepository statisticsRepository, CustomerRepository customerRepository, StoreItemRepository storeItemRepository, OrderStoreItemRepository orderStoreItemRepository, OrderRepository orderRepository) {

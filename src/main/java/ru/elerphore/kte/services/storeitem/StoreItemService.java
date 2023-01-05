@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class StoreItemService {
-    private StoreItemRepository storeItemRepository;
-    private CustomerRepository customerRepository;
-    private StoreItemCustomerRatingRepository storeItemCustomerRatingRepository;
-    private EntityManager entityManager;
+    private final StoreItemRepository storeItemRepository;
+    private final CustomerRepository customerRepository;
+    private final StoreItemCustomerRatingRepository storeItemCustomerRatingRepository;
+    private final EntityManager entityManager;
 
     public StoreItemService(StoreItemRepository storeItemRepository, CustomerRepository customerRepository, StoreItemCustomerRatingRepository storeItemCustomerRatingRepository, EntityManager entityManager) {
         this.customerRepository = customerRepository;
@@ -99,9 +99,6 @@ public class StoreItemService {
     }
 
     public BigDecimal getTotalPrice(Integer customerId, Integer storeItemId, BigDecimal amount) {
-        CustomerEntity customerEntity = customerRepository.findById(customerId).get();
-        StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItemId).get();
-
-        return new OrderCalculator().calculate(customerEntity, storeItemEntity, amount);
+        return OrderCalculator.calculate(customerRepository.findById(customerId).get(), storeItemRepository.findById(storeItemId).get(), amount);
     }
 }

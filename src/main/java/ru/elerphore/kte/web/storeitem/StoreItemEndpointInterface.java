@@ -33,10 +33,12 @@ public interface StoreItemEndpointInterface {
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "CustomerStoreItemRatingRequest")
     @ResponseWrapper(className = "StoreItemResponse")
+    @PostMapping(path = "/rating")
     void setCustomerStoreItemRating(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest);
 
     @WebResult(name = "totalPrice", targetNamespace = "")
     @RequestWrapper(localName = "StoreItemTotalPriceRequest")
-//    @ResponseWrapper(className = "StoreItemResponse")
+    @ResponseWrapper(className = "StoreItemResponse")
+    @GetMapping(path = "/totalprice")
     BigDecimal getTotalPrice(@WebParam(name = "storeItemRequest", targetNamespace = "http://kte.assigment.application") @RequestBody StoreItemRequest storeItemRequest);
 }

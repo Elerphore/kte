@@ -1,5 +1,7 @@
 package ru.elerphore.kte.web.customer;
 
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.elerphore.kte.data.customer.CustomerRequest;
 import ru.elerphore.kte.data.customer.CustomerResponse;
 
 import javax.jws.WebParam;
@@ -18,9 +20,5 @@ public interface CustomerEndpointInterface {
     @WebResult(name = "response", targetNamespace = "")
     @RequestWrapper(localName = "CustomerUpdateRequest")
     @ResponseWrapper(className = "CustomerResponse")
-    CustomerResponse updateCustomerDiscounts(
-            @WebParam(name = "customerId", targetNamespace = "http://kte.assigment.application") Integer customerId,
-            @WebParam(name = "discountOne", targetNamespace = "http://kte.assigment.application") Integer discountOneId,
-            @WebParam(name = "discountTwo", targetNamespace = "http://kte.assigment.application") Integer discountTwoId
-    );
+    CustomerResponse updateCustomerDiscounts(@WebParam(name = "customerRequest", targetNamespace = "http://kte.assigment.application") @RequestBody CustomerRequest customerRequest);
 }

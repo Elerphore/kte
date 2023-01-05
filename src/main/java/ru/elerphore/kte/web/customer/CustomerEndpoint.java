@@ -2,6 +2,7 @@ package ru.elerphore.kte.web.customer;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.elerphore.kte.data.customer.CustomerRequest;
 import ru.elerphore.kte.data.customer.CustomerResponse;
 import ru.elerphore.kte.services.customer.CustomerService;
 
@@ -26,7 +27,7 @@ public class CustomerEndpoint implements CustomerEndpointInterface {
     }
 
     @Override
-    public CustomerResponse updateCustomerDiscounts(Integer customerId, Integer discountOneId, Integer discountTwoId) {
-        return customerService.updateCustomerDiscounts(customerId, discountOneId, discountTwoId);
+    public CustomerResponse updateCustomerDiscounts(CustomerRequest customerRequest) {
+        return customerService.updateCustomerDiscounts(customerRequest.getCustomerId(), customerRequest.getDiscountOneId(), customerRequest.getDiscountTwoId());
     }
 }

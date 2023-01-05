@@ -7,9 +7,7 @@ import ru.elerphore.kte.data.customer.CustomerResponse;
 import ru.elerphore.kte.data.discount.DiscountEntity;
 import ru.elerphore.kte.data.discount.DiscountRepository;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 @Service
 public class CustomerService {
@@ -23,10 +21,7 @@ public class CustomerService {
     }
 
     public CustomerResponse getCustomers() {
-        List<CustomerEntity> customers = customerRepository.findAll();
-        CustomerResponse customerResponse = new CustomerResponse();
-        customerResponse.setItems(customers);
-        return customerResponse;
+        return new CustomerResponse(customerRepository.findAll());
     }
 
     public CustomerResponse updateCustomerDiscounts(Integer customerId, Integer discountOneId, Integer discountTwoId) {
@@ -44,10 +39,7 @@ public class CustomerService {
 
         customerRepository.save(customerEntity);
 
-        CustomerResponse customerResponse = new CustomerResponse();
-        customerResponse.setItems(new ArrayList(Collections.singleton(customerEntity)));
-
-        return customerResponse;
+        return new CustomerResponse(Collections.singletonList(customerEntity));
     }
 
 }
