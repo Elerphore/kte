@@ -85,7 +85,7 @@ public class StoreItemService {
 
         StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItemId).get();
 
-        BigDecimal discountSum = OrderCalculator.calculateItemDiscountSum(customerRepository.findById(customerId).get(), storeItemEntity, amount);
+        BigDecimal discountSum = OrderCalculator.calculateItemDiscountPercentage(customerRepository.findById(customerId).get(), storeItemEntity, amount);
         BigDecimal totalPrice = OrderCalculator.calculateItemTotalPrice(storeItemEntity, amount);
 
         return OrderCalculator.calculateItemSumPrice(totalPrice, discountSum);

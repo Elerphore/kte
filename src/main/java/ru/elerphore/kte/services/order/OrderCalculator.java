@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 import java.util.List;
 
 public class OrderCalculator {
-    static public BigDecimal calculateItemDiscountSum(CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount) {
+    static public BigDecimal calculateItemDiscountPercentage(CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount) {
         BigDecimal discount = BigDecimal.ZERO;
 
         /**
@@ -51,6 +51,16 @@ public class OrderCalculator {
         }
 
         return totalPrice.subtract(discountPrice);
+    }
+
+    static public BigDecimal calculateDiscountItemSum(BigDecimal totalPrice, BigDecimal discount) {
+        BigDecimal discountPrice = BigDecimal.ZERO;
+
+        if(discount.compareTo(BigDecimal.ZERO) > 0) {
+            discountPrice = totalPrice.multiply(discount).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        }
+
+        return discountPrice;
     }
 
     static public BigDecimal calculate(CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount) {

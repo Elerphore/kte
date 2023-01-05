@@ -1,6 +1,7 @@
 package ru.elerphore.kte.services.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
@@ -13,6 +14,7 @@ import ru.elerphore.kte.data.storeitem.StoreItemRepository;
 import ru.elerphore.kte.web.orders.UnaccurateTotalPriceSumException;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Tuple;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
@@ -58,10 +60,8 @@ public class OrderService {
         orderNumberPrefix = Stream.of(1, 2).map(n -> "" + getRandomChar()).collect(Collectors.joining(""));
     }
 
-    public String newOrder(Integer customerId, OrderRequest orderRequest, BigDecimal totalPrice) throws UnaccurateTotalPriceSumException {
-        CustomerEntity customerEntity = customerRepository.findById(customerId).get();
-
-        List<OrderStoreItemEntity> orderStoreItemEntityList = orderRequest.getStoreItemList()
+    private List<OrderStoreItemEntity> getOrderStoreItemEnitiesList(OrderRequest orderRequest) {
+        return orderRequest.getStoreItemList()
                 .stream()
                 .map(storeItem -> {
                     StoreItemEntity storeItemEntity = storeItemRepository.findById(storeItem.getId()).get();
@@ -70,31 +70,41 @@ public class OrderService {
                     return new OrderStoreItemEntity(storeItemEntity, storeItem.getAmount());
                 })
                 .collect(Collectors.toList());
+    }
 
-        BigDecimal correctedPrice = orderStoreItemEntityList
+    private Pair<BigDecimal, BigDecimal> getOrderPrices(List<OrderStoreItemEntity> orderStoreItemEntityList, CustomerEntity customerEntity) {
+        return orderStoreItemEntityList
                 .stream()
                 .map(orderStoreItemEntity -> {
-                    BigDecimal discountSum = OrderCalculator.calculateItemDiscountSum(customerEntity, orderStoreItemEntity.getStoreItem(), orderStoreItemEntity.getStoreItem().getAmount());
-                    BigDecimal totalItemPrice = orderStoreItemEntity.getStoreItem().getPrice().multiply(orderStoreItemEntity.getStoreItem().getAmount());
+                    BigDecimal discountSum = OrderCalculator.calculateItemDiscountPercentage(customerEntity, orderStoreItemEntity.getStoreItem(), orderStoreItemEntity.getStoreItem().getAmount());
+                    BigDecimal totalItemPrice = OrderCalculator.calculateItemTotalPrice(orderStoreItemEntity.getStoreItem(), orderStoreItemEntity.getStoreItem().getAmount());
+
+                    BigDecimal discountPrice = OrderCalculator.calculateDiscountItemSum(totalItemPrice, discountSum);
+
 
                     orderStoreItemEntity.setPrice(totalItemPrice);
-                    orderStoreItemEntity.setDiscount(discountSum);
-
-                    return totalItemPrice.subtract(discountSum);
+                    orderStoreItemEntity.setDiscount(discountPrice);
+                    return Pair.of(totalItemPrice, discountPrice);
                 })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(Pair.of(BigDecimal.ZERO, BigDecimal.ZERO), (pair, bigDecimalBigDecimalPair) -> Pair.of(pair.getFirst().add(bigDecimalBigDecimalPair.getFirst()), pair.getSecond().add(bigDecimalBigDecimalPair.getSecond())));
+    }
 
-        BigDecimal price = OrderCalculator.calculateTotalPrice(customerEntity, orderStoreItemEntityList.stream().map(OrderStoreItemEntity::getStoreItem).collect(Collectors.toList()));
+    public String newOrder(Integer customerId, OrderRequest orderRequest, BigDecimal requestTotalPrice) throws UnaccurateTotalPriceSumException {
+        CustomerEntity customerEntity = customerRepository.findById(customerId).get();
 
-        BigDecimal discountSum = price.subtract(correctedPrice);
+        List<OrderStoreItemEntity> orderStoreItemEntityList = getOrderStoreItemEnitiesList(orderRequest);
 
-        if(!price.equals(totalPrice)) {
+        Pair<BigDecimal, BigDecimal> orderPrices = getOrderPrices(orderStoreItemEntityList, customerEntity);
+
+        BigDecimal totalPrice = orderPrices.getFirst().subtract(orderPrices.getSecond());
+
+        if(!requestTotalPrice.equals(totalPrice)) {
             throw new UnaccurateTotalPriceSumException();
         }
 
         String orderNumber = generateOrderNumber();
 
-        final OrderEntity orderEntity = orderRepository.save(new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList, price, discountSum));
+        final OrderEntity orderEntity = orderRepository.save(new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList, orderPrices.getFirst(), orderPrices.getSecond()));
 
         orderStoreItemEntityList = orderStoreItemEntityList.stream().peek(orderStoreItemEntity -> orderStoreItemEntity.setOrder(orderEntity)).collect(Collectors.toList());
         orderEntity.setOrderStoreItemEntityList(orderStoreItemEntityList);
