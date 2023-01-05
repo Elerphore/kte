@@ -2,7 +2,10 @@ package ru.elerphore.kte.services.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
 import ru.elerphore.kte.data.order.OrderEntity;
@@ -81,7 +84,6 @@ public class OrderService {
 
                     BigDecimal discountPrice = OrderCalculator.calculateDiscountItemSum(totalItemPrice, discountSum);
 
-
                     orderStoreItemEntity.setPrice(totalItemPrice);
                     orderStoreItemEntity.setDiscount(discountPrice);
                     return Pair.of(totalItemPrice, discountPrice);
@@ -104,7 +106,7 @@ public class OrderService {
 
         String orderNumber = generateOrderNumber();
 
-        final OrderEntity orderEntity = orderRepository.save(new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList, orderPrices.getFirst(), orderPrices.getSecond()));
+        final OrderEntity orderEntity = orderRepository.save(new OrderEntity(customerEntity, orderNumber, orderStoreItemEntityList, orderPrices.getSecond(), orderPrices.getFirst()));
 
         orderStoreItemEntityList = orderStoreItemEntityList.stream().peek(orderStoreItemEntity -> orderStoreItemEntity.setOrder(orderEntity)).collect(Collectors.toList());
         orderEntity.setOrderStoreItemEntityList(orderStoreItemEntityList);
@@ -113,5 +115,4 @@ public class OrderService {
 
         return orderNumber;
     }
-
 }

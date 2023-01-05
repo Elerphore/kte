@@ -10,6 +10,7 @@ import java.util.List;
 public class OrderCalculator {
     static public BigDecimal calculateItemDiscountPercentage(CustomerEntity customerEntity, StoreItemEntity storeItemEntity, BigDecimal amount) {
         BigDecimal discount = BigDecimal.ZERO;
+        discount.setScale(2, RoundingMode.HALF_UP);
 
         /**
         * При заказе 5 и более единиц товара применяется индивидуальная скидка 2 (если не равна 0). При заказе меньшего числа единиц или отсутствии индивидуальной скидки 2 применяется индивидуальная скидка 1.
@@ -24,7 +25,7 @@ public class OrderCalculator {
         }
 
         if(storeItemEntity.getDiscount() != null) {
-            discount.add(storeItemEntity.getDiscount().getDiscountValue());
+            discount = discount.add(storeItemEntity.getDiscount().getDiscountValue());
         }
 
         /**

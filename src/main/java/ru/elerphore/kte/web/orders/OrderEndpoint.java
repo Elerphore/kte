@@ -1,7 +1,10 @@
 package ru.elerphore.kte.web.orders;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.elerphore.kte.data.order.OrderRequest;
 import ru.elerphore.kte.services.order.OrderService;
@@ -34,4 +37,9 @@ public class OrderEndpoint implements OrderEndpointInterface {
     public String newOrder(OrderRequest orderRequest) throws UnaccurateTotalPriceSumException {
         return orderService.newOrder(orderRequest.getCustomerId(), orderRequest, orderRequest.getTotalPrice());
     }
+
+    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED, reason = "UnaccurateTotalPriceSumException")
+    @ExceptionHandler(UnaccurateTotalPriceSumException.class)
+    public void handleUnaccurateTotalPriceSumException() {}
+
 }
