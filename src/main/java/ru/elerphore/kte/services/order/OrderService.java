@@ -26,7 +26,7 @@ public class OrderService {
     private final StoreItemRepository storeItemRepository;
     private final OrderRepository orderRepository;
 
-    private String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private String orderNumberPrefix;
     private Integer orderNumberCounterLastValue = -1;
 
@@ -38,10 +38,10 @@ public class OrderService {
 
     }
 
-    public String generateOrderNumber() {
+    private String generateOrderNumber() {
         orderNumberCounterLastValue++;
 
-        return orderNumberPrefix + "000" + orderNumberCounterLastValue.toString();
+        return orderNumberPrefix + "000" + orderNumberCounterLastValue;
     }
 
     private char getRandomChar() {
@@ -49,6 +49,10 @@ public class OrderService {
         int index = random.nextInt(allowedChars.length());
         return allowedChars.charAt(index);
     }
+
+    /**
+     * Номер чека уникален в пределах суток, состоит из пяти цифр с лидирующими нулями, каждый день нумерация начинается с 00100 и растет последовательно (+1 для каждого чека).
+     * */
 
     @PostConstruct
     private void generateRandomPrefix() {

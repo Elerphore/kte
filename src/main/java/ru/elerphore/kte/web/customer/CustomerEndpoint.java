@@ -1,5 +1,6 @@
 package ru.elerphore.kte.web.customer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.elerphore.kte.data.customer.CustomerRequest;
@@ -21,6 +22,7 @@ public class CustomerEndpoint implements CustomerEndpointInterface {
 
     public CustomerEndpoint() { }
 
+    @Autowired
     public CustomerEndpoint(CustomerService customerService) {
         this.customerService = customerService;
     }

@@ -26,6 +26,10 @@ public class DiscountService {
         this.storeItemRepository = storeItemRepository;
     }
 
+    /**
+    * Раз в час случайным образом выбирается товар, на который следующий час будет действовать скидка. Скидка выбирается случайным образом от 5% до 10% и фиксируется в БД.
+    * */
+
     @Scheduled(fixedRate = 360000)
     void discountStoreItemSelection() {
         if(lastStoreItemEntity != null) {
