@@ -39,6 +39,7 @@ create table statistics (
     customer_id integer,
     total_price double precision,
     discount_sum double precision,
+    orders_amount integer,
 
     constraint fk_storeitem foreign key (storeitem_id) references storeitems(id) on delete cascade on update cascade,
     constraint fk_customer foreign key (customer_id) references customers(id) on delete cascade on update cascade

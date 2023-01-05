@@ -29,6 +29,9 @@ public class StatisticEntity {
     @Column
     private BigDecimal discountSum;
 
+    @Column
+    private Integer ordersAmount;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -75,5 +78,13 @@ public class StatisticEntity {
 
     public void setDiscountSum(BigDecimal discountSum) {
         this.discountSum = discountSum;
+    }
+
+    public Integer getOrdersAmount() {
+        return ordersAmount;
+    }
+
+    public void setOrdersAmount(Integer ordersAmount) {
+        this.ordersAmount = ordersAmount;
     }
 }

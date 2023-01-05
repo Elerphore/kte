@@ -9,13 +9,12 @@ import ru.elerphore.kte.data.order.OrderEntity;
 import ru.elerphore.kte.data.order.OrderRepository;
 import ru.elerphore.kte.data.orderstoreitem.OrderStoreItemEntity;
 import ru.elerphore.kte.data.orderstoreitem.OrderStoreItemRepository;
-import ru.elerphore.kte.data.statistic.StatisticEntity;
-import ru.elerphore.kte.data.statistic.StatisticTypeEnum;
-import ru.elerphore.kte.data.statistic.StatisticsRepository;
+import ru.elerphore.kte.data.statistic.*;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;
 import ru.elerphore.kte.data.storeitem.StoreItemRepository;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -35,6 +34,10 @@ public class StatisticService {
         this.orderStoreItemRepository = orderStoreItemRepository;
         this.orderRepository = orderRepository;
     }
+
+    /**
+     * генерация статистики и скидок производится фоновым процессом по таймеру;
+    * */
 
     @Scheduled(fixedRate = 1000)
     void statistics() {
@@ -56,6 +59,7 @@ public class StatisticService {
 
         statisticEntity.setDiscountSum(totalDiscountSum);
         statisticEntity.setTotalPrice(totalPrice);
+        statisticEntity.setOrdersAmount(orderStoreItemEntityList.size());
 
         statisticEntity.setStatisticType(StatisticTypeEnum.STOREITEM);
         statisticEntity.setStoreItem(storeItemEntity);
@@ -64,8 +68,10 @@ public class StatisticService {
     }
 
     private void generateCustomerStatistics(CustomerEntity customerEntity) {
-        BigDecimal totalDiscountSum = orderRepository.findAllByCustomerEntity(customerEntity).stream().map(OrderEntity::getDiscountSum).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal totalPrice = orderRepository.findAllByCustomerEntity(customerEntity).stream().map(OrderEntity::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<OrderEntity> orders = orderRepository.findAllByCustomerEntity(customerEntity);
+
+        BigDecimal totalDiscountSum = orders.stream().map(OrderEntity::getDiscountSum).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalPrice = orders.stream().map(OrderEntity::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         StatisticEntity statisticEntity = statisticsRepository.findStatisticEntitiesByCustomer(customerEntity);
 
@@ -75,10 +81,30 @@ public class StatisticService {
 
         statisticEntity.setDiscountSum(totalDiscountSum);
         statisticEntity.setTotalPrice(totalPrice);
+        statisticEntity.setOrdersAmount(orders.size());
 
-        statisticEntity.setStatisticType(StatisticTypeEnum.STOREITEM);
+        statisticEntity.setStatisticType(StatisticTypeEnum.CUSTOMER);
         statisticEntity.setCustomer(customerEntity);
 
         statisticsRepository.save(statisticEntity);
+    }
+
+    public StatisticResponse getStatistic(StatisticRequest statisticRequest) throws OnlyOneIdentifierAvailableException {
+        if(statisticRequest.getStoreItemId() != null && statisticRequest.getStoreItemId() != null) {
+            throw new OnlyOneIdentifierAvailableException();
+        }
+
+        StatisticEntity statisticEntity = null;
+
+        if(statisticRequest.getCustomerId() != null) {
+            statisticEntity = statisticsRepository.findStatisticEntitiesByCustomerId(statisticRequest.getCustomerId());
+        }
+
+        if(statisticRequest.getStoreItemId() != null) {
+            statisticEntity = statisticsRepository.findStatisticEntitiesByStoreItemId(statisticRequest.getStoreItemId());
+        }
+
+        return new StatisticResponse(Collections.singletonList(new StatisticItem(statisticEntity)));
+
     }
 }
