@@ -48,12 +48,17 @@ public class StatisticService {
         BigDecimal totalDiscountSum = orderStoreItemEntityList.stream().map(OrderStoreItemEntity::getDiscount).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal totalPrice = orderStoreItemEntityList.stream().map(OrderStoreItemEntity::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        StatisticEntity statisticEntity = new StatisticEntity();
-        statisticEntity.setStoreItem(storeItemEntity);
+        StatisticEntity statisticEntity = statisticsRepository.findStatisticEntitiesByStoreItem(storeItemEntity);
+
+        if(statisticEntity == null) {
+            statisticEntity = new StatisticEntity();
+        }
+
         statisticEntity.setDiscountSum(totalDiscountSum);
         statisticEntity.setTotalPrice(totalPrice);
 
         statisticEntity.setStatisticType(StatisticTypeEnum.STOREITEM);
+        statisticEntity.setStoreItem(storeItemEntity);
 
         statisticsRepository.save(statisticEntity);
     }
@@ -62,12 +67,16 @@ public class StatisticService {
         BigDecimal totalDiscountSum = orderRepository.findAllByCustomerEntity(customerEntity).stream().map(OrderEntity::getDiscountSum).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal totalPrice = orderRepository.findAllByCustomerEntity(customerEntity).stream().map(OrderEntity::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        StatisticEntity statisticEntity = new StatisticEntity();
-        statisticEntity.setStatisticType(StatisticTypeEnum.STOREITEM);
-        statisticEntity.setCustomer(customerEntity);
+        StatisticEntity statisticEntity = statisticsRepository.findStatisticEntitiesByCustomer(customerEntity);
+
+        if(statisticEntity == null) {
+            statisticEntity = new StatisticEntity();
+        }
+
         statisticEntity.setDiscountSum(totalDiscountSum);
         statisticEntity.setTotalPrice(totalPrice);
 
+        statisticEntity.setStatisticType(StatisticTypeEnum.STOREITEM);
         statisticEntity.setCustomer(customerEntity);
 
         statisticsRepository.save(statisticEntity);
