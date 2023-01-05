@@ -22,6 +22,7 @@ public class OrderRequest {
         this.storeItemList = storeItemList;
     }
 
+    @XmlElement(name = "customerId", namespace = "http://kte.assigment.application")
     public Integer getCustomerId() {
         return customerId;
     }
@@ -30,6 +31,7 @@ public class OrderRequest {
         this.customerId = customerId;
     }
 
+    @XmlElement(name = "totalPrice", namespace = "http://kte.assigment.application")
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
