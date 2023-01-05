@@ -1,4 +1,4 @@
-package ru.elerphore.kte.services;
+package ru.elerphore.kte.services.order;
 
 import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.storeitem.StoreItemEntity;

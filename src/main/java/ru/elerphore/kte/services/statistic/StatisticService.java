@@ -1,4 +1,4 @@
-package ru.elerphore.kte.services;
+package ru.elerphore.kte.services.statistic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

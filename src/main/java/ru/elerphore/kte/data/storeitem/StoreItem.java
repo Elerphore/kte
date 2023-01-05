@@ -21,8 +21,7 @@ public class StoreItem {
     private Integer customerRating;
     private Map<String, Integer> ratingDistribution;
 
-    private StoreItem() {
-
+    public StoreItem() {
     }
 
     public StoreItem(Integer id, BigDecimal amount) {
@@ -107,5 +106,21 @@ public class StoreItem {
 
     public void setRatingDistribution(Map<String, Integer> ratingDistribution) {
         this.ratingDistribution = ratingDistribution;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

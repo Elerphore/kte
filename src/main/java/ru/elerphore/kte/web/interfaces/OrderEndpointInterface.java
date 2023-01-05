@@ -1,4 +1,4 @@
-package ru.elerphore.kte.web.soap.orders;
+package ru.elerphore.kte.web.interfaces;
 
 import ru.elerphore.kte.data.order.OrderRequest;
 
