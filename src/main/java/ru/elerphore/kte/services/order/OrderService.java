@@ -5,6 +5,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.elerphore.kte.data.customer.CustomerEntity;
 import ru.elerphore.kte.data.customer.CustomerRepository;
@@ -29,10 +30,7 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final StoreItemRepository storeItemRepository;
     private final OrderRepository orderRepository;
-
-    private final String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private String orderNumberPrefix;
-    private Integer orderNumberCounterLastValue = -1;
+    private Integer orderNumberCounterLastValue = 99;
 
     @Autowired
     public OrderService(CustomerRepository customerRepository, StoreItemRepository storeItemRepository, OrderRepository orderRepository) {
@@ -42,25 +40,22 @@ public class OrderService {
 
     }
 
-    private String generateOrderNumber() {
-        orderNumberCounterLastValue++;
-
-        return orderNumberPrefix + "000" + orderNumberCounterLastValue;
-    }
-
-    private char getRandomChar() {
-        Random random = new Random();
-        int index = random.nextInt(allowedChars.length());
-        return allowedChars.charAt(index);
-    }
-
     /**
      * Номер чека уникален в пределах суток, состоит из пяти цифр с лидирующими нулями, каждый день нумерация начинается с 00100 и растет последовательно (+1 для каждого чека).
      * */
 
+    private String generateOrderNumber() {
+        orderNumberCounterLastValue++;
+        return "00" + orderNumberCounterLastValue;
+    }
+
     @PostConstruct
-    private void generateRandomPrefix() {
-        orderNumberPrefix = Stream.of(1, 2).map(n -> "" + getRandomChar()).collect(Collectors.joining(""));
+    public void getLastOrderNumber() {
+        Integer lastOrderNumber = orderRepository.findLastOrderNumber();
+
+        if(lastOrderNumber != null) {
+            orderNumberCounterLastValue = lastOrderNumber;
+        }
     }
 
     private List<OrderStoreItemEntity> getOrderStoreItemEnitiesList(OrderRequest orderRequest) {

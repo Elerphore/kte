@@ -45,7 +45,7 @@ public class OrderCalculator {
 
     static public BigDecimal calculateItemSumPrice(BigDecimal totalPrice, BigDecimal discount) {
 
-        BigDecimal discountPrice = totalPrice;
+        BigDecimal discountPrice = BigDecimal.ZERO;
 
         if(discount.compareTo(BigDecimal.ZERO) > 0) {
             discountPrice = totalPrice.multiply(discount).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
